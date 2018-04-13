@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import java.lang.StringBuilder;
 
 /**
  * This class contains some utility helper methods
@@ -86,7 +87,39 @@ public class WordProcessor {
 	 * @return true if word1 and word2 are adjacent else false
 	 */
 	public static boolean isAdjacent(String word1, String word2) {
-		return false;	
+		if(word1.equals(word2))
+			return false;
+		StringBuilder temp;
+		StringBuilder word2b = new StringBuilder(word2);
+		char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+		
+		// replacement
+		for(int i = 0; i < word1.length(); i++) {
+			temp = new StringBuilder(word1);
+			for(int j = 0; j < alphabet.length; j++) {
+				temp.setCharAt(i, alphabet[j]);
+				if(temp.equals(word2b))
+					return true;
+			}
+		}
+		
+		// addition
+		for(int i = 0; i <= word1.length(); i++) {
+			temp = new StringBuilder(word1);
+			for(int j = 0; j < alphabet.length; j++) {
+				temp.insert(i, alphabet[j]);
+				if(temp.equals(word2b))
+					return true;
+			}
+		}
+		
+		// deletion
+		for(int i = 0; i < word1.length(); i++) {
+			temp = new StringBuilder(word1);
+			temp.deleteCharAt(i);
+			if(temp.equals(word2b))
+				return true;
+		}
+		return false;
 	}
-	
 }
