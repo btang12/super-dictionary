@@ -66,7 +66,9 @@ public class WordProcessor {
 		 * 		streamOfLines.map(...).filter(a -> ...).map(...) and so on
 		 */
 		
-		return null;
+		//All lines from file returned as stream. Trim and upper-case functions are applied to stream. 
+		//Empty lines are filtered.
+		return Files.lines(Paths.get(filepath)).map(w -> w.trim().toUpperCase()).filter(w -> w != "");
 	}
 	
 	/**
