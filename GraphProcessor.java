@@ -79,8 +79,7 @@ public class GraphProcessor {
      * @return List<String> list of the words
      */
     public List getShortestPath(String word1, String word2) {
-        return null;
-    
+    	return graph.Dijkstra(word1,word2);     // PROBLEM: need to change graph's type to Graph instead of GrapghADT   
     }
     
     /**
@@ -104,7 +103,7 @@ public class GraphProcessor {
      * @return Integer distance
      */
     public Integer getShortestDistance(String word1, String word2) {
-        return null;
+        return getShortestPath(word1,word2).size()-1;
     }
     
     /**
@@ -113,7 +112,12 @@ public class GraphProcessor {
      * Any shortest path algorithm can be used (Djikstra's or Floyd-Warshall recommended).
      */
     public void shortestPathPrecomputation() {
-    
+   	 ArrayList<Integer> a = new ArrayList<Integer>();
+    		for( String src: graph.getAllVertices()) {
+    			for(String dest: graph.getAllVertices()) {
+    				a.add(getShortestDistance(src,dest));
+    		}
+    	}
     }
 	
 	
