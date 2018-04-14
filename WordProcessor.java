@@ -92,7 +92,6 @@ public class WordProcessor {
 		if(word1.equals(word2))
 			return false;
 		StringBuilder temp;
-		StringBuilder word2b = new StringBuilder(word2);
 		char[] alphabet = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 		
 		// replacement
@@ -100,17 +99,17 @@ public class WordProcessor {
 			temp = new StringBuilder(word1);
 			for(int j = 0; j < alphabet.length; j++) {
 				temp.setCharAt(i, alphabet[j]);
-				if(temp.equals(word2b))
+				if(temp.toString().equalsIgnoreCase(word2))
 					return true;
 			}
 		}
 		
 		// addition
 		for(int i = 0; i <= word1.length(); i++) {
-			temp = new StringBuilder(word1);
 			for(int j = 0; j < alphabet.length; j++) {
+				temp = new StringBuilder(word1);
 				temp.insert(i, alphabet[j]);
-				if(temp.equals(word2b))
+				if(temp.toString().equalsIgnoreCase(word2))
 					return true;
 			}
 		}
@@ -119,7 +118,7 @@ public class WordProcessor {
 		for(int i = 0; i < word1.length(); i++) {
 			temp = new StringBuilder(word1);
 			temp.deleteCharAt(i);
-			if(temp.equals(word2b))
+			if(temp.toString().equalsIgnoreCase(word2))
 				return true;
 		}
 		return false;

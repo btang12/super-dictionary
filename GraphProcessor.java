@@ -1,13 +1,13 @@
-import java.awt.List;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class GraphProcessor {
-	private GraphADT<String> graph;
 	
 	 /**
      * Graph which stores the dictionary words and their associated connections
      */
-    private GraphADT<String> graph;
+    private Graph<String> graph;
 
     /**
      * Constructor for this class. Initializes instances variables to set the starting state of the object
@@ -36,13 +36,15 @@ public class GraphProcessor {
 	public Integer populate(String filepath)
 	{
 		
-		graph = new GraphADT<String>();
+		graph = new Graph<String>();
+		List<String> words;
 		try {
-		List words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());
+			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());
 		} catch(Exception e) {
-			return -1;
+			System.out.println(e);
+			return -1; 
 		}
-		Integer count;
+		Integer count = 0;
 		for(String w : words)
 		{
 			graph.addVertex(w);
@@ -78,7 +80,7 @@ public class GraphProcessor {
      * @param word2 second word
      * @return List<String> list of the words
      */
-    public List getShortestPath(String word1, String word2) {
+    public List<String> getShortestPath(String word1, String word2) {
     	return graph.Dijkstra(word1,word2);     // PROBLEM: need to change graph's type to Graph instead of GrapghADT   
     }
     
@@ -117,9 +119,8 @@ public class GraphProcessor {
     			for(String dest: graph.getAllVertices()) {
     				a.add(getShortestDistance(src,dest));
     		}
-    	}
+    	} 		  		
+    		
     }
-	
-	
 	
 }
