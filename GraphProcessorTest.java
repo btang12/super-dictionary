@@ -44,7 +44,6 @@ class GraphProcessorTest {
 		} catch(Exception e) {}
 		
 	}
-	
 	@Test
 	void test_getShortestDistance_multiple_vertices()
 	{
@@ -61,9 +60,24 @@ class GraphProcessorTest {
 		assertEquals("-1", graph.getShortestDistance("cat", "bat"));
 	}
 	@Test
-	void test_getWordStream_valid_filepath()
+	void test_isAdjacent_non_adj_words()
 	{
-		
+		assertFalse(WordProcessor.isAdjacent("int, "wiki"));
+	}
+	@Test 
+	void test_isAdjacent_adj_words_add()
+	{
+		assertTrue(WordProcessor.isAdjacent("bat","bath"));
+	}
+	@Test
+	void test_isAdjacent_adj_words_replace()
+	{
+		assertTrue(WordProcessor.isAdjacent("bat", "cat"));
+	}
+	@Test
+	void test_isAdjacent_adj_words_delete()
+	{
+		assertTrue(WordProcessor.isAdjacent("bat", "ba"));
 	}
 
 }
