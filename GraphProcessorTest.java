@@ -1,6 +1,8 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.awt.List;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +15,13 @@ class GraphProcessorTest {
 
 	@Before
 	public void setUp() throws Exception {
+		List<String> dict = new ArrayList<String>();
+		dict.add("cat");
+		dict.add("rat");
+		dict.add("hat");
+		dict.add("neat");
+		dict.add("wheat");
+		dict.add("kit");
 		this.graph = new GraphProcessor();
 	}
 	@After
@@ -20,91 +29,30 @@ class GraphProcessorTest {
 		this.graph = null;
 	}
 	@Test
-	//
-	void test0_getShortestPath_no_vertices() {
-		expected = null;
-		List vertices = graph.getShortestPath("A","B");
-		actual =
-		fail("Not yet implemented");
+	void test0_populate_with_invalid_filepath() {
+		assertEquals("-1",graph.populate("A") + "");
 	}
 	@Test
-	void test1_getShortestDistance_no_vertices() {
-		expected =
-		actual =
-		fail("Not yet implemented");
+	void test1_populate_valid_filepath() {
+		assertEquals("6", graph.populate("testWordTest.txt"));
 	}
 	@Test
-	void test2_populate_with_invalid_filepath() {
-		expected = -1;
-		actual = graph.populate("A");
-		fail("Not yet implemented");
+	void test2_invalid_filepath_log() {
+		try {
+			graph.populate("A");
+			fail("Graph.populate() Did not throw IOException when invalid filepath passed");
+		} catch(Exception e) {}
+		
 	}
 	@Test
-	void test3_shortestPathPrecomputation_no_vertices() {
-		expected =
-		actual =
-		fail("Not yet implemented");
+	void test3_getShortestPath_multiple_vertices() {
+		String[] path = new {
+		List<String> path = graph.getShortestPath("cat", "wheat");
+		for(int i = 0; i < path.size();i++)
+		{
+			assertEquals(, path.get(i));
+		}
+		
 	}
-	@Test
-	void test4_populate_one_verticy() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test5_getShortestPath_one_verticy() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test6_getShortestDistance_one_verticy() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test7_shortestPathPrecomputation_one_verticy() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test8_populate_multiple_vertices() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test9_getShortestPath_short() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test10_getShortestDistance_short() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test11_shortestPathPrecomputation_short() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test10_getShortestDistance_long() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	@Test
-	void test11_shortestPathPrecomputation_long() {
-		expected =
-		actual =
-		fail("Not yet implemented");
-	}
-	
 
 }
