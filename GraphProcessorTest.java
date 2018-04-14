@@ -44,14 +44,25 @@ class GraphProcessorTest {
 		} catch(Exception e) {}
 		
 	}
+	
 	@Test
-	void test3_getShortestPath_multiple_vertices() {
-		String[] path = new {
-		List<String> path = graph.getShortestPath("cat", "wheat");
-		for(int i = 0; i < path.size();i++)
-		{
-			assertEquals(, path.get(i));
-		}
+	void test_getShortestDistance_multiple_vertices()
+	{
+		assertEquals("3",graph.getShortestDistance("cat", "wheat") + "");
+	}
+	@Test
+	void test_getShortestDistance_same_vertices()
+	{
+		assertEquals("-1", graph.getShortestDistance("cat", "cat") + "");
+	}
+	@Test
+	void test_getShortestDistance_no_path()
+	{
+		assertEquals("-1", graph.getShortestDistance("cat", "bat"));
+	}
+	@Test
+	void test_getWordStream_valid_filepath()
+	{
 		
 	}
 
