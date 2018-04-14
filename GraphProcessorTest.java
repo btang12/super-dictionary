@@ -45,39 +45,55 @@ class GraphProcessorTest {
 		
 	}
 	@Test
-	void test_getShortestDistance_multiple_vertices()
-	{
+	void test3_getShortestPath_multiple_vertices() {
+		graph.populate("testWordList.txt");
+		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "wheat"));
+		ArrayList<String> expectedPath = new ArrayList<String>();
+		expectedPath.add("cat");
+		expectedPath.add("hat");
+		expectedPath.add("heat");
+		expectedPath.add("neat");
+		for(int i = 0; i < path.size(); i++)
+		{
+			assertEquals(expectedPath.get(i), path.get(i));
+		}
+	}
+	@Test
+	void test4_getShortestPath_invalid_path() {
+		graph.populate("testWordList.txt");
+		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "kit"));
+		assertEquals(null, path);
+	}
+	@Test
+	void test5_getShortestPath_no_vertices() {
+		GraphProcessor graph1 = new GraphProcessor();
+		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph1.getShortestPath("cat", "wheat"));
+		assertEquals(null, path);
+	}
+	@Test
+	void test_6_getShortestPath_same_vertices() {
+		graph.populate("testWordList.txt");
+		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "cat"));
+		assertEquals(0, path.size());
+	}
+	@Test
+	void test_getShortestDistance_multiple_vertices() {
+		graph.populate("testWordList.txt");
 		assertEquals("3",graph.getShortestDistance("cat", "wheat") + "");
 	}
 	@Test
-	void test_getShortestDistance_same_vertices()
-	{
+	void test_getShortestDistance_same_vertices() {
+		graph.populate("testWordList.txt");
 		assertEquals("-1", graph.getShortestDistance("cat", "cat") + "");
 	}
 	@Test
-	void test_getShortestDistance_no_path()
-	{
+	void test_getShortestDistance_no_path() {
+		graph.populate("testWordList.txt");
 		assertEquals("-1", graph.getShortestDistance("cat", "bat"));
 	}
 	@Test
-	void test_isAdjacent_non_adj_words()
-	{
-		assertFalse(WordProcessor.isAdjacent("int, "wiki"));
-	}
-	@Test 
-	void test_isAdjacent_adj_words_add()
-	{
-		assertTrue(WordProcessor.isAdjacent("bat","bath"));
-	}
-	@Test
-	void test_isAdjacent_adj_words_replace()
-	{
-		assertTrue(WordProcessor.isAdjacent("bat", "cat"));
-	}
-	@Test
-	void test_isAdjacent_adj_words_delete()
-	{
-		assertTrue(WordProcessor.isAdjacent("bat", "ba"));
+	void test_getWordStream_valid_filepath() {
+		
 	}
 
 }
