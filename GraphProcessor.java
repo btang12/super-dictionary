@@ -33,7 +33,7 @@ public class GraphProcessor {
      * @param filepath file path to the dictionary
      * @return Integer the number of vertices (words) added; return -1 if file not found or if encountering other exceptions
      */
-	public Integer populate(String filepath)
+	public Integer populateGraph(String filepath)
 	{
 		
 		graph = new Graph<String>();
