@@ -1,16 +1,6 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-/**
- * Undirected and unweighted graph implementation
- * 
- * @param <E> type of a vertex
- * 
- * @author
- * 
- */
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 public class Graph<E> implements GraphADT<E> {
     protected final int defCapacity = 10;
@@ -18,6 +8,7 @@ public class Graph<E> implements GraphADT<E> {
     protected boolean[][] adjacencyMatrix;
     protected E[] vertices;
 
+    @SuppressWarnings("unchecked")
     public Graph() {
         vertexCount = 0;
         this.adjacencyMatrix = new boolean[defCapacity][defCapacity];
@@ -28,6 +19,7 @@ public class Graph<E> implements GraphADT<E> {
      * Expands the array of vertices, as well as the adjacency matrix, two double their current size
      * in order to accommodate future vertex additions
      */
+    @SuppressWarnings("unchecked")
     public void expandArrays() {
         E[] expandedVertices = (E[]) (new Object[vertices.length * 2]);
         boolean[][] expandedAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
@@ -180,7 +172,7 @@ public class Graph<E> implements GraphADT<E> {
             if (vertices[i] == vertex2) {
                 T2 = true;
                 index2 = i;
-            }
+            }            
         }
         if (!(T1 && T2) || (vertex1 == vertex2)) {
             return false;
@@ -243,11 +235,12 @@ public class Graph<E> implements GraphADT<E> {
                 check = true;
                 target = i;
             }
+             
+        }
         if(!check) {
             return null;
-        }
-        }
-        ArrayList<E> neighbors = new ArrayList<E>();
+        }  
+        List<E> neighbors = new ArrayList<E>();
         for(int i = 0; i < vertexCount; i++) {
             if(adjacencyMatrix[target][i] == true) {
                 neighbors.add(vertices[i]);
@@ -315,6 +308,7 @@ public class Graph<E> implements GraphADT<E> {
           result += "\n";
        }
 
+
        result += "\n\nVertex Values";
        result += "\n-------------\n";
        result += "index\tvalue\n\n";
@@ -332,27 +326,43 @@ public class Graph<E> implements GraphADT<E> {
      * Main method for testing purposes
      * @param args
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static void main(String args[]) {
-        Graph test = new Graph();
-        test.addVertex(5);
-        test.addVertex(7);
-        test.addVertex(6);
-        test.addVertex(8);
-        test.addEdge(5, 7);
-        test.addEdge(8, 5);
-        test.addEdge(5, 6);
+        GraphADT<String> test = new Graph<String>();
+        test.addVertex("test");
+        test.addVertex("test2");
+        test.addVertex("CS");
+        test.addVertex("HELP");
+        test.addEdge("test", "CS");
+        test.addEdge("test", "HELP");
+        test.addEdge("test", "test2");
         System.out.println(test.toString());
-        ArrayList<Integer> neighbors = (ArrayList<Integer>) test.getNeighbors(5);
-        ArrayList<Integer> vertices = (ArrayList<Integer>) test.getAllVertices();
+        ArrayList<String> neighbors = (ArrayList<String>) test.getNeighbors("test");
+        ArrayList<String> vertices = (ArrayList<String>) test.getAllVertices();
         System.out.println(neighbors.size());
         System.out.println(neighbors.get(0));
         System.out.println(neighbors.get(1));
         System.out.println(neighbors.get(2));
-        System.out.println(test.removeEdge(7, 5));
+        System.out.println(test.removeEdge("CS", "test"));
         System.out.println(test.toString());
+        
+        test.removeVertex(vertices.get(0));
         for(int i = 0; i < vertices.size(); i++) {
             System.out.println(vertices.get(i));
         }
+        System.out.println(test.toString());
+        
+        System.out.println("WHAT AM I. I AM : " + vertices.get(2));
+        
+        test.removeVertex(vertices.get(2));
+        for(int i = 0; i < vertices.size(); i++) {
+            System.out.println(vertices.get(i));
+        }
+        System.out.println(test.toString());
+        
+        Iterable<String> test4 = test.getNeighbors("test");
+        Iterable<String> test3 = test.getNeighbors("test");
+        Iterator<String> test2 = test.getNeighbors("test2").iterator(); 
     }
 
 }
