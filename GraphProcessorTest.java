@@ -95,5 +95,26 @@ class GraphProcessorTest {
 	void test_getWordStream_valid_filepath() {
 		
 	}
+	@Test
+	public final void test_wordProcessorStream() {
+		try {
+			List<String> words = Files.lines(Paths.get("src/word_list")).map(w -> w.trim().toUpperCase()).filter(w -> w != "").collect(Collectors.toList());
+			for(int i = 0; i < words.size(); i++) {
+				if(!words.get(i).equals(words.get(i).toUpperCase())) {
+					fail("Stream did not return all uppercase words");
+				}
+				if(words.get(i) == "") {
+					fail("Stream returned an empty line");
+				}
+				for(int j = 0; j < words.get(i).length(); j++) {
+					if(words.get(i).charAt(j) == ' ') {
+						fail("Stream did not trim all lines");
+					}
+				}
+			}
+		} catch (IOException e) {
+			fail("Could not get file at specified path");
+		}	
+	}
 
 }
