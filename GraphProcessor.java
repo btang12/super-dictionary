@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 public class GraphProcessor {
 	
 	 /**
@@ -33,6 +35,7 @@ public class GraphProcessor {
      * 
      * @param filepath file path to the dictionary
      * @return Integer the number of vertices (words) added; return -1 if file not found or if encountering other exceptions
+     * @throws IOException - when file is not found.
      */
 	public Integer populateGraph(String filepath)
 	{
@@ -40,12 +43,13 @@ public class GraphProcessor {
 		graph = new Graph<String>();
 		List<String> words;
 		try {
-			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());
+			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());//Load words from dictionary file via Collecting a Stream into List<String>
 		} catch(IOException e) {
 			System.out.println(e);
 			return -1; 
 		}
 		Integer count = 0;
+		//add vertices and edges to graph. Adds edges by first testing adjacency.
 		for(String w : words)
 		{
 			graph.addVertex(w);
@@ -56,7 +60,7 @@ public class GraphProcessor {
 			}
 			count++;
 		}
-		shortestPathPrecomputation();
+		shortestPathPrecomputation(); // pre-compute shortest path
 		return count;
 	}
 	
