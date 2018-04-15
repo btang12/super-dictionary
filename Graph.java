@@ -276,5 +276,117 @@ public class Graph<E> implements GraphADT<E> {
     		return true;
     	return false;
     }
-    
+ 
+ 	/*
+	 * The following part is used for finding shortest path by using Floyd's
+	 * Algorithm
+	 */
+
+	/*
+	 * Helper method for adding path between every possible pair of vertices into an
+	 * array list. path - a two-d array storing the indexes of each vertices in a
+	 * path. v - index of starting vertex u - index of ending vertex p - an array
+	 * list storing every vertex in this path
+	 */
+	private void addPath(int[][] path, int v, int u, ArrayList<String> p) {
+		if (path[v][u] == v)
+			return;
+		if (path[v][u] == -1) {
+			p.add("unreachable");
+			return;
+		}
+		addPath(path, v, path[v][u], p);
+		p.add((String) vertices[path[v][u]]);
+	}
+
+	/*
+	 * Function to add the shortest cost with path information between all pairs of
+	 * vertices path[][] - a two-d array storing the indexes of each vertices in a
+	 * path. v - index of starting vertex u - index of ending vertex
+	 */
+	private ArrayList<String> addSolution(int[][] path, int src, int dist) {
+		ArrayList<String> P = new ArrayList<String>();
+
+		P.add((String) vertices[src]);
+		addPath(path, src, dist, P); // add vertices recursively
+		P.add((String) vertices[dist]);
+		return P;
+	}
+
+	
+	ArrayList<E>[][] P;  // used to store all possible paths
+
+	// Function to run Floyd-Warshell algorithm
+	public ArrayList<E>[][] FloydWarshell(int[][] adjMatrix, int N) {
+		// cost[] and parent[] stores shortest-path
+		// (shortest-cost/shortest route) information
+		int[][] cost = new int[N][N];
+		int[][] path = new int[N][N];
+
+		// initialize cost[] and parent[]
+		for (int v = 0; v < N; v++) {
+			for (int u = 0; u < N; u++) {
+				// initally cost would be same as weight
+				// of the edge
+				cost[v][u] = adjMatrix[v][u];
+
+				if (v == u)
+					path[v][u] = 0;
+				else if (cost[v][u] != Integer.MAX_VALUE)
+					path[v][u] = v;
+				else
+					path[v][u] = -1;
+			}
+		}
+
+		// run Floyd-Warshell
+		for (int k = 0; k < N; k++) {
+			for (int v = 0; v < N; v++) {
+				for (int u = 0; u < N; u++) {
+					// If vertex k is on the shortest path from v to u,
+					// then update the value of cost[v][u], path[v][u]
+
+					if (cost[v][k] != Integer.MAX_VALUE && cost[k][u] != Integer.MAX_VALUE
+							&& (cost[v][k] + cost[k][u] < cost[v][u])) {
+						cost[v][u] = cost[v][k] + cost[k][u];
+						path[v][u] = path[k][u];
+					}
+				}
+
+				// if diagonal elements become negative, the
+				// graph contains a negative weight cycle
+				if (cost[v][v] < 0) {
+					System.out.println("Negative Weight Cycle Found!!");
+					return null;
+				}
+			}
+		}
+
+		// Add the shortest path between all pairs of vertices to a list
+		P = new ArrayList[vertices.length][vertices.length];
+		int s = 0;
+		int d = 0;
+		boolean T1 = false;
+		boolean T2 = false;
+		for (E sorc : getAllVertices()) {
+			for (E dest : getAllVertices()) {
+				for (int i = 0; i < vertexCount; i++) {
+					if (vertices[i] == sorc) {
+						T1 = true;
+						s = i;
+					}
+					if (vertices[i] == dest) {
+						T2 = true;
+						d = i;
+					}
+				}
+				if (T1 == true & T2 == true) { // if these two vertices exist
+					P[s][d] = (ArrayList<E>) addSolution(path, s, d);
+				}
+			}
+		}
+		return P;
+	}
+
+}  
 }
