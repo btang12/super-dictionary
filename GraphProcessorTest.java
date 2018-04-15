@@ -1,7 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,72 +22,71 @@ public class GraphProcessorTest {
 		dict.add("cat");
 		dict.add("rat");
 		dict.add("hat");
-		dict.add("neat");
+		dict.add("heat");
 		dict.add("wheat");
 		dict.add("kit");
 		this.graph = new GraphProcessor();
-	}
+	} 
 	@After
 	public void tearDown() throws Exception {
 		this.graph = null;
 	}
 	@Test
 	public void test00_populate_with_invalid_filepath() {
-		assertEquals("-1",graph.populate("A") + "");
+		assertEquals("-1",graph.populateGraph("A") + "");
 	}
 	@Test
 	public void test01_populate_valid_filepath() {
-		assertEquals("7", graph.populate("src/testWordList.txt")+"");
+		assertEquals("6", graph.populateGraph("src/testWordList.txt")+"");
 	}
 	@Test
 	public void test02_getShortestPath_multiple_vertices() {
-		graph.populate("src/testWordList.txt");
-		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "wheat"));
-		ArrayList<String> expectedPath = new ArrayList<String>();
+		graph.populateGraph("src/testWordList.txt");
+		List<String> path = graph.getShortestPath("cat", "wheat");
+		List<String> expectedPath = new ArrayList<String>();
 		expectedPath.add("cat");
 		expectedPath.add("hat");
 		expectedPath.add("heat");
-		expectedPath.add("neat");
+		expectedPath.add("wheat");
 		for(int i = 0; i < path.size(); i++)
 		{
 			assertEquals(expectedPath.get(i), path.get(i));
 		}
 	}
-	@Test
+	@Test 
 	public void test03_getShortestPath_invalid_path() {
-		graph.populate("src/testWordList.txt");
-		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "kit"));
+		graph.populateGraph("src/testWordList.txt");
+		List<String> path = graph.getShortestPath("cat", "kit");
 		for(String s: path)
 			assertEquals(null, s);
 	}
 	@Test
 	public void test04_getShortestPath_no_vertices() {
 		GraphProcessor graph1 = new GraphProcessor();
-		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph1.getShortestPath("cat", "wheat"));
-		for(String s: path)
-			assertEquals(null, s);
+		List<String> path = graph1.getShortestPath("cat", "wheat");
+		assertEquals(null, path);
 	}
 	@Test
 	public void test05_getShortestPath_same_vertices() {
-		graph.populate("src/testWordList.txt");
-		ArrayList<String> path = new ArrayList<String>((ArrayList<String>) graph.getShortestPath("cat", "cat"));
+		graph.populateGraph("src/testWordList.txt");
+		List<String> path = graph.getShortestPath("cat", "cat");
 		for(String s: path)
 			assertEquals(null, s);
 	}
 	@Test
 	public void test06_getShortestDistance_multiple_vertices() {
-		graph.populate("src/testWordList.txt");
-		assertEquals("3",graph.getShortestDistance("cat", "wheat") + "");
+		graph.populateGraph("src/testWordList.txt");
+		assertEquals("3", graph.getShortestDistance("cat", "wheat") + "");
 	} 
 	@Test
 	public void test07_getShortestDistance_same_vertices() {
-		graph.populate("src/testWordList.txt");
+		graph.populateGraph("src/testWordList.txt");
 		assertEquals("-1", graph.getShortestDistance("cat", "cat") + "");
 	}
 	@Test
 	public void test08_getShortestDistance_no_path() {
-		graph.populate("src/testWordList.txt");
-		assertEquals("-1", graph.getShortestDistance("cat", "bat"));
+		graph.populateGraph("src/testWordList.txt");
+		assertEquals("-1", graph.getShortestDistance("cat", "bat") + "");
 	}
 	@Test
 	public void test09_getWordStream_invalid_filepath() {
