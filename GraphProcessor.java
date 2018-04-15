@@ -123,30 +123,7 @@ public class GraphProcessor {
      * @return List<String> list of the words
      */
 	public List<String> getShortestPath(String word1, String word2) {
-
-		int src = 0;
-		int dist = 0;
-		for (int i = 0; i < graph.vertices.length; i++) {
-			if (graph.vertices[i] == word1)
-				src = i;
-			if (graph.vertices[i] == word2)
-				dist = i;
-
-		}
-		int[][] m = new int[graph.vertexCount][graph.vertexCount];
-		for (int i = 0; i < graph.vertexCount; i++) {
-
-			for (int j = 0; j < graph.vertexCount; j++) {
-				if (i == j)
-					m[i][j] = 0;
-				else if (graph.adjacencyMatrix[i][j] == true) {
-					m[i][j] = 1;
-				} else
-					m[i][j] = 99999;
-			}
-		}
-		FloydWarshell(m, graph.vertexCount, src, dist);
-		return P;
+		return graph.getShortestPath(word1, word2);
 	}
 
 	/**
@@ -173,7 +150,6 @@ public class GraphProcessor {
 	 * Floyd-Warshall recommended).
 	 */
 	public void shortestPathPrecomputation() {
-		ArrayList<Integer> a = new ArrayList<Integer>();
 		for (String src : graph.getAllVertices()) {
 			for (String dest : graph.getAllVertices()) {
 				if(src == dest) continue;
@@ -181,81 +157,4 @@ public class GraphProcessor {
 				System.out.println("; and the length is; " + getShortestDistance(src,dest));			}
 		}
 	}
-
-	/*
-	 * The following part is used for finding shortest path by using Floyd's
-	 * Algorithm
-	 */
-	ArrayList<String> P = new ArrayList<String>();
-
-	private void addPath(int[][] path, int v, int u, ArrayList<String> p) {
-		if (path[v][u] == v)
-	        return;
-
-	    addPath(path, v, path[v][u],p);
-	    p.add((String) graph.vertices[path[v][u]]);
-	}
-
-	// Function to add the shortest cost with path
-	// information between all pairs of vertices
-	private ArrayList<String> addSolution(int[][] cost, int[][] path, int N, int src, int dist) {
-		ArrayList<String> P = new ArrayList<String>();
-
-		P.add((String) graph.vertices[src]);
-		addPath(path,src,dist,P);
-		P.add((String) graph.vertices[dist]);
-		return P;
-	}
-
-	// Function to run Floyd-Warshell algorithm
-	public ArrayList<String> FloydWarshell(int[][] adjMatrix, int N, int src, int dist) {
-		// cost[] and parent[] stores shortest-path
-		// (shortest-cost/shortest route) information
-		int[][] cost = new int[N][N];
-		int[][] path = new int[N][N];
-
-		// initialize cost[] and parent[]
-		for (int v = 0; v < N; v++) {
-			for (int u = 0; u < N; u++) {
-				// initally cost would be same as weight
-				// of the edge
-				cost[v][u] = adjMatrix[v][u];
-
-				if (v == u)
-					path[v][u] = 0;
-				else if (cost[v][u] != Integer.MAX_VALUE)
-					path[v][u] = v;
-				else
-					path[v][u] = -1;
-			}
-		}
-
-		// run Floyd-Warshell
-		for (int k = 0; k < N; k++) {
-			for (int v = 0; v < N; v++) {
-				for (int u = 0; u < N; u++) {
-					// If vertex k is on the shortest path from v to u,
-					// then update the value of cost[v][u], path[v][u]
-
-					if (cost[v][k] != Integer.MAX_VALUE && cost[k][u] != Integer.MAX_VALUE
-							&& (cost[v][k] + cost[k][u] < cost[v][u])) {
-						cost[v][u] = cost[v][k] + cost[k][u];
-						path[v][u] = path[k][u];
-					}
-				}
-
-				// if diagonal elements become negative, the
-				// graph contains a negative weight cycle
-				if (cost[v][v] < 0) {
-					System.out.println("Negative Weight Cycle Found!!");
-					return null;
-				}
-			}
-		}
-
-		// Print the shortest path between all pairs of vertices
-	    ArrayList<String> P = addSolution(cost, path, N, src,dist);
-	    return P;
-	}
-	
 }
