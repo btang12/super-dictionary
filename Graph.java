@@ -11,7 +11,7 @@ public class Graph<E> implements GraphADT<E> {
     public Graph() {
         vertexCount = 0;
         this.adjacencyMatrix = new boolean[defCapacity][defCapacity];
-        this.vertices = (E[]) (new Object[defCapacity]);
+        this.vertices = (E[]) (new String[defCapacity]);
     }
 
     /**
@@ -20,7 +20,7 @@ public class Graph<E> implements GraphADT<E> {
      */
     @SuppressWarnings("unchecked")
     public void expandArrays() {
-        E[] expandedVertices = (E[]) (new Object[vertices.length * 2]);
+        E[] expandedVertices = (E[]) (new String[vertices.length * 2]);
         boolean[][] expandedAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
 
         for (int i = 0; i < vertexCount; i++) {

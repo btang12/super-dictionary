@@ -1,5 +1,6 @@
-import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class GraphProcessor {
@@ -40,7 +41,7 @@ public class GraphProcessor {
 		List<String> words;
 		try {
 			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());
-		} catch(Exception e) {
+		} catch(IOException e) {
 			System.out.println(e);
 			return -1; 
 		}
@@ -99,7 +100,7 @@ public class GraphProcessor {
 			count++;
 		}
 		
-		shortestPathPrecomputation();
+		//shortestPathPrecomputation();
 		return count;
 	}
     
@@ -153,18 +154,18 @@ public class GraphProcessor {
      *             cat
      *             rat
      *             hat
-     *             neat
+     *             heat
      *             wheat
      *             kit
      *  distance of the shortest path between cat and wheat, [cat, hat, heat, wheat]
      *   = 3 (the number of edges in the shortest path)
      * 
      * @param word1 first word
-     * @param word2 second word
+     * @param word2   word
      * @return Integer distance
      */
     public Integer getShortestDistance(String word1, String word2) {
-    		int src=0;
+    		int src = 0;
     		int dist = 0;
     		for(int i = 0; i < graph.vertices.length; i++) {
     			if(graph.vertices[i] == word1) src = i;
