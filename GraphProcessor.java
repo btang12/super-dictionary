@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
 public class GraphProcessor {
 	
 	 /**
@@ -33,6 +35,7 @@ public class GraphProcessor {
      * 
      * @param filepath file path to the dictionary
      * @return Integer the number of vertices (words) added; return -1 if file not found or if encountering other exceptions
+     * @throws IOException - when file is not found.
      */
 	public Integer populateGraph(String filepath)
 	{
@@ -40,12 +43,13 @@ public class GraphProcessor {
 		graph = new Graph<String>();
 		List<String> words;
 		try {
-			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());
+			words = WordProcessor.getWordStream(filepath).collect(Collectors.toList());//Load words from dictionary file via Collecting a Stream into List<String>
 		} catch(IOException e) {
 			System.out.println(e);
 			return -1; 
 		}
 		Integer count = 0;
+		//add vertices and edges to graph. Adds edges by first testing adjacency.
 		for(String w : words)
 		{
 			graph.addVertex(w);
@@ -56,7 +60,7 @@ public class GraphProcessor {
 			}
 			count++;
 		}
-		shortestPathPrecomputation();
+		shortestPathPrecomputation(); // pre-compute shortest path
 		return count;
 	}
 	
@@ -78,31 +82,26 @@ public class GraphProcessor {
      * @return List<String> list of the words
      */
 	public List<String> getShortestPath(String word1, String word2) {
-		if(graph.isEmpty()) 
-			return null;
-		int src = 0;
-		int dist = 0;
-		for (int i = 0; i < graph.vertices.length; i++) {
-			if (graph.vertices[i] == word1)
-				src = i;
-			if (graph.vertices[i] == word2)
-				dist = i;
-
-		}                           
-		int[][] m = new int[graph.vertexCount][graph.vertexCount];
+//		return graph.getShortestPath(word1, word2);
+		boolean T1 = false;
+		boolean T2 = false;
+		int s= 0;
+		int d = 0;
 		for (int i = 0; i < graph.vertexCount; i++) {
-
-			for (int j = 0; j < graph.vertexCount; j++) {
-				if (i == j)
-					m[i][j] = 0;
-				else if (graph.adjacencyMatrix[i][j] == true) {
-					m[i][j] = 1;
-				} else
-					m[i][j] = 99999;
-			}
+	        if (graph.vertices[i] == word1) {
+	            T1 = true;
+	            s = i;
+	        }
+	        if (graph.vertices[i] == word2) {
+	            T2 = true;
+	            d = i;
+	        }
 		}
-		FloydWarshell(m, graph.vertexCount, src, dist);
-		return P;
+		if(T1 == true && T2  == true) {
+			return (List<String>) p[s][d];
+		}
+		else 
+			return null;
 	}
 
 	/**
@@ -119,9 +118,14 @@ public class GraphProcessor {
 	 * @return Integer distance
 	 */
 	public Integer getShortestDistance(String word1, String word2) {
-		return getShortestPath(word1, word2).size()-1;
+		if(getShortestPath(word1, word2) == null) {
+			return 0;
+		} else {
+			return getShortestPath(word1, word2).size()-1;
+		}	
 	}
 
+	private ArrayList<String>[][] p;
 	/**
 	 * Computes shortest paths and distances between all possible pairs of vertices.
 	 * This method is called after every set of updates in the graph to recompute
@@ -129,89 +133,24 @@ public class GraphProcessor {
 	 * Floyd-Warshall recommended).
 	 */
 	public void shortestPathPrecomputation() {
-		ArrayList<Integer> a = new ArrayList<Integer>();
-		for (String src : graph.getAllVertices()) {
-			for (String dest : graph.getAllVertices()) {
-				if(src == dest) continue;
-				System.out.print("The shortest path from " + src + " to " + dest + "is" + getShortestPath(src,dest).toString());
-				System.out.println("; and the length is; " + getShortestDistance(src,dest));			}
-		}
-	}
+//		for (String src : graph.getAllVertices()) {
+//			for (String dest : graph.getAllVertices()) {
+//				if(src == dest) continue;
+//				System.out.print("The shortest path from " + src + " to " + dest + "is" + getShortestPath(src,dest).toString());
+//				System.out.println("; and the length is; " + getShortestDistance(src,dest));			}
+//		}
+		int[][] m = new int[graph.vertexCount][graph.vertexCount];
+		for (int i = 0; i < graph.vertexCount; i++) {
 
-	/*
-	 * The following part is used for finding shortest path by using Floyd's
-	 * Algorithm
-	 */
-	ArrayList<String> P = new ArrayList<String>();
-
-	private void addPath(int[][] path, int v, int u, ArrayList<String> p) {
-		if (path[v][u] == v)
-	        return;
-
-	    addPath(path, v, path[v][u],p);
-	    p.add((String) graph.vertices[path[v][u]]);
-	}
-
-	// Function to add the shortest cost with path
-	// information between all pairs of vertices
-	private ArrayList<String> addSolution(int[][] cost, int[][] path, int N, int src, int dist) {
-		ArrayList<String> P = new ArrayList<String>();
-
-		P.add((String) graph.vertices[src]);
-		addPath(path,src,dist,P);
-		P.add((String) graph.vertices[dist]);
-		return P;
-	}
-
-	// Function to run Floyd-Warshell algorithm
-	public ArrayList<String> FloydWarshell(int[][] adjMatrix, int N, int src, int dist) {
-		// cost[] and parent[] stores shortest-path
-		// (shortest-cost/shortest route) information
-		int[][] cost = new int[N][N];
-		int[][] path = new int[N][N];
-
-		// initialize cost[] and parent[]
-		for (int v = 0; v < N; v++) {
-			for (int u = 0; u < N; u++) {
-				// initally cost would be same as weight
-				// of the edge
-				cost[v][u] = adjMatrix[v][u];
-
-				if (v == u)
-					path[v][u] = 0;
-				else if (cost[v][u] != Integer.MAX_VALUE)
-					path[v][u] = v;
-				else
-					path[v][u] = -1;
+			for (int j = 0; j < graph.vertexCount; j++) {
+				if (i == j)
+					m[i][j] = 0;
+				else if (graph.adjacencyMatrix[i][j] == true) {
+					m[i][j] = 1;
+				} else
+					m[i][j] = Integer.MAX_VALUE;
 			}
 		}
-
-		// run Floyd-Warshell
-		for (int k = 0; k < N; k++) {
-			for (int v = 0; v < N; v++) {
-				for (int u = 0; u < N; u++) {
-					// If vertex k is on the shortest path from v to u,
-					// then update the value of cost[v][u], path[v][u]
-
-					if (cost[v][k] != Integer.MAX_VALUE && cost[k][u] != Integer.MAX_VALUE
-							&& (cost[v][k] + cost[k][u] < cost[v][u])) {
-						cost[v][u] = cost[v][k] + cost[k][u];
-						path[v][u] = path[k][u];
-					}
-				}
-
-				// if diagonal elements become negative, the
-				// graph contains a negative weight cycle
-				if (cost[v][v] < 0) {
-					System.out.println("Negative Weight Cycle Found!!");
-					return null;
-				}
-			}
-		}
-
-		// Print the shortest path between all pairs of vertices
-	    ArrayList<String> P = addSolution(cost, path, N, src,dist);
-	    return P;
+		p = graph.FloydWarshell(m,graph.vertexCount);
 	}
-	
 }
