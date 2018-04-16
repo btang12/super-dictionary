@@ -1,3 +1,13 @@
+
+/////////////////////////////////////
+// p4 Dictionary Graph
+// Chris Sullivan, Brain Tang, Matthew Thomas, Patrick Stiles, Xiaoyu Sun
+// csullivan9@wisc.edu, btang12@wisc.edu, mcthomas4@wisc.edu, pdstiles@wisc.edu, SeanXiaoyuSun@wisc.edu
+// 4/16/18
+// Outside Sources: none
+// Bugs: none
+// Professor: Deb Deppeler
+//////////////////////////////////////
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -5,7 +15,8 @@ import java.util.stream.Stream;
 import java.lang.StringBuilder;
 
 /**
- * This class contains some utility helper methods for the GraphProcessor class to process words.
+ * This class contains some utility helper methods for the GraphProcessor class
+ * to process words.
  * 
  * @author Chris Sullivan (
  */
@@ -19,7 +30,8 @@ public class WordProcessor {
 	 * @param filepath
 	 *            file path to the dictionary file
 	 * @return Stream<String> stream of words read from the filepath
-	 * @throws IOException exception resulting from accessing the filepath
+	 * @throws IOException
+	 *             exception resulting from accessing the filepath
 	 * 
 	 */
 	public static Stream<String> getWordStream(String filepath) throws IOException {

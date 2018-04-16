@@ -1,0 +1,6 @@
+cat
+rat
+hat
+heat
+wheat
+kit
