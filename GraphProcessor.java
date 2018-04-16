@@ -118,7 +118,11 @@ public class GraphProcessor {
 	 * @return Integer distance
 	 */
 	public Integer getShortestDistance(String word1, String word2) {
-		return getShortestPath(word1, word2).size()-1;
+		if(getShortestPath(word1, word2) == null) {
+			return 0;
+		} else {
+			return getShortestPath(word1, word2).size()-1;
+		}	
 	}
 
 	private ArrayList<String>[][] p;
